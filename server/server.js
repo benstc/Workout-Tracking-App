@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql2')
@@ -9,14 +11,14 @@ const SALT_ROUNDS_COUNT = 10;
 
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:5173', // React app origin
+    origin: process.env.APP_ORIGIN, // React app origin
     credentials: true
   }));;
 app.use(express.json());
 
 app.use(
     session({
-      secret: "TrackerSecret",
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -28,10 +30,10 @@ app.use(
   );
 
 var connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "dupers711",
-    database: "workout",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     port: 3306
 })
 
@@ -260,7 +262,7 @@ app.post('/sign-up', (req, res) => {
         
         const jwtToken = jwt.sign(
             { userId: userId},
-            "IgottASecret",
+            process.env.JWT_SECRET,
             { expiresIn: '1d' }
         )
         req.session.save((err) => {
@@ -293,7 +295,7 @@ app.post('/login', (req, res) => {
 
             const jwtToken = jwt.sign(
                 { userId: userId},
-                "IgottASecret",
+                process.env.JWT_SECRET,
                 { expiresIn: '1d' }
             )
             req.session.save((err) => {
