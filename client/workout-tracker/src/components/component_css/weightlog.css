@@ -1,0 +1,11 @@
+.weight-input-container {
+    margin: 15px;
+}
+.date-input-container {
+    margin: 15px;
+}
+.weight-log-container {
+    outline: 1px solid white;
+    border-radius: 20px;
+    padding: 50px;
+}

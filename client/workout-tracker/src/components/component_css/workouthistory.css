@@ -1,0 +1,18 @@
+.workout-item {
+    outline: 1px solid white;
+    border-radius: 10px;
+}
+
+.workout-item:hover {
+    outline: 1px solid #646cff;
+    box-shadow: 0 0 20px #646cff;
+    cursor: pointer;
+}
+
+.workout-items-container {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20%;
+    grid-row: auto auto;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+}

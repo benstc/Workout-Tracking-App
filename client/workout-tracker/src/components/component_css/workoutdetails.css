@@ -1,0 +1,11 @@
+.set-container {
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.workout-data-container {
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 30px;
+}

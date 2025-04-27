@@ -1,0 +1,100 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+.exercise-input-container {
+  outline: 1px solid white;
+  border-radius: 8px;
+  padding: 10px 10px 30px 10px;
+}
+.exercise-input-container h3 {
+  margin-bottom: 30px
+}
+.search-container {
+  display: flex;
+  justify-content: space-between;
+}
+.search-container button {
+  margin-right: 40px;
+}
+.search-select {
+  margin-right: 40px;
+  margin-left: 40px;
+}
+.new-exercise-and-back-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.new-exercise-and-back-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.new-exercise {
+  margin-left: auto;
+  color: #61dafb;
+  margin-bottom: 15px;
+  display: inline;
+}
+.new-exercise:hover {
+  cursor: pointer;
+}
+.custom-exercise-input {
+  padding: 10px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.new-exercise-submit-button {
+  margin-right: 20px;
+}
+
+.exercise-log-component {
+  outline: 1px solid white;
+  border-radius: 8px;
+  padding: 30px;
+  margin: 20px;
+} 
+.delete-log-button {
+  background-color: rgb(173, 5, 5);
+  border-color: white;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.delete-log-button:hover {
+  background-color: rgb(141, 4, 4);
+  border-color: whitesmoke;
+}
+
+.workout-notes-container {
+  font-weight: 700;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+}
+.workout-notes-container label {
+  margin-right: 10px;
+}
+
+.workout-date-container {
+  font-weight: 700;
+  margin-top: 30px;
+}
+.workout-date-container label {
+  margin-right: 10px;
+}
+
+
+
