@@ -10,8 +10,12 @@ const jwt = require('jsonwebtoken');
 const SALT_ROUNDS_COUNT = 10;
 
 const app = express()
+const allowed_origins = ['http://localhost:5173',
+    'https://workout-tracking-app-lake.vercel.app',
+    'https://workout-tracking-app-ben-st-clairs-projects.vercel.app',
+    'https://workout-tracking-app-git-main-ben-st-clairs-projects.vercel.app']
 app.use(cors({
-    origin: process.env.APP_ORIGIN, // React app origin
+    origin: allowed_origins, // React app origin
     credentials: true
   }));;
 app.use(express.json());

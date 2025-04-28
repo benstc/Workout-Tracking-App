@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import "./component_css/logoutButton.css"
 
-
+//
 export default function LogOut() {
     const navigate = useNavigate()
     const signOut = useSignOut()
