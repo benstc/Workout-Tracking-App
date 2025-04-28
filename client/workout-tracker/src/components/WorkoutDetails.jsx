@@ -14,7 +14,7 @@ export default function WorkoutDetails() {
     
     useEffect(() => {
         if (!fetching) return
-        fetch(`http://localhost:4800/workoutData/${workoutId}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/workoutData/${workoutId}`, {
             method: "GET",
             credentials: "include",
           }).then(

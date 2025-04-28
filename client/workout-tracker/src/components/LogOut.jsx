@@ -8,7 +8,7 @@ export default function LogOut() {
     const signOut = useSignOut()
 
     async function handleLogOut() {
-        const response = await fetch('http://localhost:4800/logout', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/logout`, {
                 method: 'POST',
                 credentials: "include",
                 headers: {'Content-Type': 'application/json'}

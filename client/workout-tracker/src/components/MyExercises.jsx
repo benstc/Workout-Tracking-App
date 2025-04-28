@@ -12,7 +12,7 @@ export default function MyExercises() {
 
     useEffect(() => {
         if (!fetching) return
-        fetch('http://localhost:4800/exercises', {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/exercises`, {
             method: "GET",
             credentials: "include",
           }).then(
@@ -32,7 +32,7 @@ export default function MyExercises() {
 
     async function handleEditSubmit() {
       console.log("New edited exercise: ", editedExercise)
-      const response = await fetch('http://localhost:4800/editExercise', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/editExercise`, {
         method: "POST",
         credentials: "include",
         headers: {'Content-Type': 'application/json'},
@@ -50,7 +50,7 @@ export default function MyExercises() {
 
     async function handleEditDelete() {
       console.log("Deleting exercise: ", editedExercise)
-      const response = await fetch('http://localhost:4800/deleteExercise', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/deleteExercise`, {
         method: "POST",
         credentials: "include",
         headers: {'Content-type': 'application/json'},

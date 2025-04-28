@@ -17,7 +17,7 @@ export default function WeightLog() {
                 weight: weightInput,
                 date: dateInput
             }
-            const response = await fetch('http://localhost:4800/submitWeightLog', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/submitWeightLog`, {
                 method: 'POST',
                 credentials: "include",
                 headers: {'Content-Type': 'application/json'},

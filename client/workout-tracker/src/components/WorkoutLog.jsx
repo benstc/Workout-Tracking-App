@@ -19,7 +19,7 @@ export default function WorkoutLog() {
 
     useEffect(() => {
         if (!fetching) return
-        fetch('http://localhost:4800/exercises', {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/exercises`, {
             method: "GET",
             credentials: "include",
           }).then(
@@ -60,7 +60,7 @@ export default function WorkoutLog() {
         if (name === "") {
             alert("Type an exercise before submitting")
         } else {
-            const response = await fetch('http://localhost:4800/newExercise', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/newExercise`, {
                 method: 'POST',
                 credentials: "include",
                 headers: {'Content-Type': 'application/json'},
@@ -107,7 +107,7 @@ export default function WorkoutLog() {
             date: workoutDate,
             notes: workoutNotes
         }
-        const response = await fetch('http://localhost:4800/submitWorkout', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/submitWorkout`, {
                 method: 'POST',
                 credentials: "include",
                 headers: {'Content-Type': 'application/json'},

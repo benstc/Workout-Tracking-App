@@ -12,7 +12,7 @@ export default function ExerciseDetails() {
 
     useEffect(() => {
         if (!fetching) return
-        fetch(`http://localhost:4800/exerciseData/${exerciseId}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/exerciseData/${exerciseId}`, {
             method: "GET",
             credentials: "include",
           }).then(

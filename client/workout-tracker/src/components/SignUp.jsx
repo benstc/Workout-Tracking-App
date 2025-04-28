@@ -12,7 +12,7 @@ export default function SignUp() {
         if (username == "" || password == "") {
             alert("Input username and password before submitting")
         } else {
-            const response = await fetch('http://localhost:4800/sign-up', { //ensure that the /signup path exists in server
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sign-up`, { //ensure that the /signup path exists in server
                 method: 'POST',
                 credentials: "include",
                 headers: {'Content-Type': 'application/json'},

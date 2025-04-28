@@ -14,7 +14,7 @@ export default function WeightProgress() {
     
     useEffect(() => {
         if (!fetching) return
-        fetch("http://localhost:4800/weightData", {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/weightData`, {
             method: "GET",
             credentials: "include"
         }).then(

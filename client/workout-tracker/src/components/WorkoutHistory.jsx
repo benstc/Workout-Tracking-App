@@ -12,7 +12,7 @@ export default function WorkoutHistory() {
 
     useEffect(() => {
         if (!fetching) return
-        fetch('http://localhost:4800/workouts', {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/workouts`, {
             method: "GET",
             credentials: "include",
           }).then(
