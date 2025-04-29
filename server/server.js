@@ -59,10 +59,10 @@ app.get('/api', (req, res) => {
 })
 app.get('/exercises', (req, res) => {
     const sql = `SELECT * FROM Exercises 
-                WHERE user_id = 1 OR user_id = ?
+                WHERE user_id = ? OR user_id = ?
                 ORDER BY name`
     const userId = req.session.user
-    connection.query(sql, userId, function(error, result) {
+    connection.query(sql, [process.env.ROOT_USER_ID, userId], function(error, result) {
         if (error) throw error;
         else {
             res.json(result)
