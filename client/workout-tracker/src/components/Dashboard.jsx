@@ -10,8 +10,8 @@ export default function Dashboard() {
             <SideBar />
             <LogOut />
             <div className="square-container">
-                <DashSquare name="Log Workout" imgPath="/src/assets/icons/dumbbell.png" redirectPath="/logWorkout"/>
-                <DashSquare name="Log Weight" imgPath="/src/assets/icons/scale.png" redirectPath="/logWeight"/>
+                <DashSquare name="Log Workout" imgPath="/icons/dumbbell.png" redirectPath="/logWorkout"/>
+                <DashSquare name="Log Weight" imgPath="/icons/scale.png" redirectPath="/logWeight"/>
             </div>
         </>
     )
