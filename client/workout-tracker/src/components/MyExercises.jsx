@@ -73,6 +73,7 @@ export default function MyExercises() {
         <SideBar />
         <div ref={contentRef} className="main-content">
             {!fetching && <h1>My Exercises</h1>}
+            {!fetching && <h5>(Click exercise name to view progress)</h5>}
             <div>
                 {exercises.map((exerciseData, index) => (
                     <ExerciseItem key={index} exercise={exerciseData} handleEdit={handleEdit} index={index}/>

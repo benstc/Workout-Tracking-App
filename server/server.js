@@ -62,6 +62,7 @@ app.get('/exercises', (req, res) => {
                 WHERE user_id = ? OR user_id = ?
                 ORDER BY name`
     const userId = req.session.user
+    console.log("/exercises UserID: ", userId)
     connection.query(sql, [process.env.ROOT_USER_ID, userId], function(error, result) {
         if (error) throw error;
         else {
@@ -72,6 +73,7 @@ app.get('/exercises', (req, res) => {
 app.get('/exerciseData/:input', (req, res) => {
     const exercise_id = req.params.input;
     const user_id = req.session.user
+    console.log("/exercideData/:input UserID: ", user_id)
     const sql = `SELECT Sets.reps, Sets.weight, Workouts.date
                 FROM Sets 
                 INNER JOIN Workouts ON Sets.workout_id = Workouts.id
@@ -92,6 +94,7 @@ app.get('/exerciseData/:input', (req, res) => {
 })
 app.get('/weightData', (req, res) => {
     const userId = req.session.user
+    console.log("/weightData UserID: ", userId)
     const sql = `SELECT weight, date
                 FROM WeightLogs
                 WHERE userId = ?`
@@ -108,6 +111,7 @@ app.get('/weightData', (req, res) => {
 app.post('/newExercise', (req, res) => {
     const postData = req.body;
     const userId = req.session.user
+    console.log("/newExercise UserID: ", userId)
     const query = {
         name: postData.exerciseName,
         user_id: userId
@@ -126,6 +130,7 @@ app.post('/newExercise', (req, res) => {
 app.post('/editExercise', (req, res) => {
     const postData = req.body
     const user_id = req.session.user
+    console.log("/editExercise UserID: ", user_id)
     const sql = `UPDATE Exercises
                 SET name = ?
                 WHERE id = ? AND user_id = ?`
@@ -139,6 +144,7 @@ app.post('/editExercise', (req, res) => {
 app.post('/deleteExercise', (req, res) => {
     const postData = req.body
     const user_id = req.session.user
+    console.log("/deleteExercise UserID: ", user_id)
     const sql = `DELETE FROM Exercises
                 WHERE id = ? and user_id = ?`
     connection.query(sql, [postData.id, user_id], function(err, result) {
@@ -151,6 +157,7 @@ app.post('/deleteExercise', (req, res) => {
 app.post('/submitWorkout', (req, res) => {
     const exercises = req.body;
     const userId = req.session.user
+    console.log("/submitWorkout UserID: ", userId)
     insertWorkoutData(exercises, userId)
     return res.status(200).json({message: 'Successful workout submit'})
 })
@@ -204,6 +211,7 @@ function insertSet(set) {
 }
 app.get('/workouts', (req, res) => {
     const user_id = req.session.user
+    console.log("/workouts UserID: ", user_id)
     const sql = `SELECT id, date, notes
                 FROM Workouts
                 WHERE user_id = ?
@@ -219,6 +227,7 @@ app.get('/workouts', (req, res) => {
 app.get('/workoutData/:input', (req, res) => {
     const workout_id = req.params.input
     const user_id = req.session.user
+    console.log("/workoutData/:input UserID: ", user_id)
     const sql = `SELECT date, notes
                 FROM Workouts
                 WHERE id = ? AND user_id = ?`
@@ -242,6 +251,7 @@ app.get('/workoutData/:input', (req, res) => {
 app.post('/submitWeightLog', (req, res) => {
     const data = req.body
     const userId = req.session.user
+    console.log("/submitWeightLog userId: ", userId)
     const sql = `INSERT INTO WeightLogs (userId, weight, date) VALUES (?, ?, ?)`
     connection.query(sql, [userId, data.weight, data.date], function(err, result) {
         if (err) res.status(500).json({ error: err.message })
@@ -314,7 +324,7 @@ app.post('/login', (req, res) => {
 })
 
 app.post("/logout", (req, res) => {
-    req.session.id = null
+    req.session.user = null
     res.status(200).json({ message: "successfully logged out" })
 })
 
