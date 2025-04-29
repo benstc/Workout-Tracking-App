@@ -61,7 +61,18 @@ app.get('/exercises', (req, res) => {
     const sql = `SELECT * FROM Exercises 
                 WHERE user_id = ? OR user_id = ?
                 ORDER BY name`
-    const userId = req.session.user
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Missing or invalid token' });
+    }
+    const jwtToken = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+    } catch (err) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+    }
     console.log("/exercises UserID: ", userId)
     connection.query(sql, [process.env.ROOT_USER_ID, userId], function(error, result) {
         if (error) throw error;
@@ -298,27 +309,24 @@ app.post('/login', (req, res) => {
         if (error) throw error;
         if (result.length == 0) {
             console.log("no username match")
-            res.status(401).json({message: 'Incorrect username/password'})
+            return res.status(401).json({message: 'Incorrect username/password'})
         } else if (!bcrypt.compareSync(password, result[0].password_hash)) {
             console.log("password doesn't match")
-            res.status(401).json({message: 'Incorrect username/password'})
+            return res.status(401).json({message: 'Incorrect username/password'})
         } else {
             console.log("Successful username and password")
             const userId = result[0].id
-            req.session.user = userId
 
             const jwtToken = jwt.sign(
                 { userId: userId},
                 process.env.JWT_SECRET,
                 { expiresIn: '1d' }
             )
-            req.session.save((err) => {
-                if (err) return res.status(500).json({ error: "Session error" });
-                res.status(200).json({
-                    message: "Login successful",
-                    token: jwtToken,
-                    user: { id: userId, username: username }
-            })});
+            res.status(200).json({
+                message: "Login successful",
+                token: jwtToken,
+                user: { id: userId, username: username }
+            });
         }
     })
 })

@@ -30,7 +30,7 @@ export default function LoginPage() {
                       token: data.token,
                       type: 'token'
                     },
-                    userState: { username: username }
+                    userState: { username: username, userId: data.user.id }
                   });
                 navigate("/Dashboard")
             } else {

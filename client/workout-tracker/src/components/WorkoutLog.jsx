@@ -19,9 +19,12 @@ export default function WorkoutLog() {
 
     useEffect(() => {
         if (!fetching) return
+        const token = localStorage.getItem("token")
         fetch(`${import.meta.env.VITE_BACKEND_URL}/exercises`, {
             method: "GET",
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
           }).then(
           response => response.json()
         ).then(
