@@ -6,7 +6,7 @@ A clean React-based workout tracker that lets users log exercise information and
 
 ## 🌐 Live Demo
 
-🔗 [View Deployed App](workout-tracking-app-lake.vercel.app)
+🔗 [View Deployed App](https://workout-tracking-app-lake.vercel.app/)
 
 ---
 
