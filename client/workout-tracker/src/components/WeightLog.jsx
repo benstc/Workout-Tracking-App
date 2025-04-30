@@ -1,4 +1,5 @@
 import { useState } from "react"
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import SideBar from "./SideBar"
 import { useNavigate } from "react-router-dom"
 import "./component_css/weightlog.css"
@@ -7,6 +8,7 @@ export default function WeightLog() {
     const [weightInput, setWeightInput] = useState("")
     const [dateInput, setDateInput] = useState("")
     const navigate = useNavigate()
+    const token = useAuthHeader()
     
     async function submitWeightLog() {
         if (!dateInput || !weightInput) {
@@ -19,8 +21,10 @@ export default function WeightLog() {
             }
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/submitWeightLog`, {
                 method: 'POST',
-                credentials: "include",
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify(data)
             })
             if (response.ok) {

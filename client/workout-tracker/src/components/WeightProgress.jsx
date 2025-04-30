@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import Graph from './Graph.jsx'
 import SideBar from './SideBar.jsx'
 import './component_css/myexercises.css'
 
-/* ^^^ Change ExerciseGraph to be called Graph.jsx or something more general
- and change ExerciseGraph to have the label given as params since thats
- the only difference between what this weight progress graph will be and 
- the exercise details graph */
-
 export default function WeightProgress() {
     const [fetching, setFetching] = useState(true)
     const [graphData, setGraphData] = useState(null)
+    const token = useAuthHeader()
     
     useEffect(() => {
         if (!fetching) return
         fetch(`${import.meta.env.VITE_BACKEND_URL}/weightData`, {
             method: "GET",
-            credentials: "include"
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
         }).then(
             response => response.json()
         ).then(

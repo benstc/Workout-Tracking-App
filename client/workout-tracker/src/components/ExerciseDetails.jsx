@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import Graph from './Graph.jsx'
 import SideBar from './SideBar.jsx'
 import './component_css/myexercises.css'
@@ -9,12 +10,15 @@ export default function ExerciseDetails() {
     const [fetching, setFetching] = useState(true)
     const [exerciseData, setExerciseData] = useState(null)
     const [exerciseName, setExerciseName] = useState()
+    const token = useAuthHeader()
 
     useEffect(() => {
         if (!fetching) return
         fetch(`${import.meta.env.VITE_BACKEND_URL}/exerciseData/${exerciseId}`, {
             method: "GET",
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
           }).then(
           response => response.json()
         ).then(

@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import SideBar from "./SideBar.jsx"
 import WorkoutExercise from "./WorkoutExercise.jsx"
 import "./component_css/workoutdetails.css"
@@ -9,6 +10,7 @@ export default function WorkoutDetails() {
     const [fetching, setFetching] = useState(true)
     const [workoutData, setWorkoutData] = useState(null)
     const navigate = useNavigate()
+    const token = useAuthHeader()
 
 
     
@@ -16,7 +18,9 @@ export default function WorkoutDetails() {
         if (!fetching) return
         fetch(`${import.meta.env.VITE_BACKEND_URL}/workoutData/${workoutId}`, {
             method: "GET",
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
           }).then(
           response => {
             if (response.status === 200) {
@@ -28,6 +32,7 @@ export default function WorkoutDetails() {
         ).then(
           data => {
             handleWorkoutData(data)
+            setFetching(false)
           }
         )
       }, [fetching])

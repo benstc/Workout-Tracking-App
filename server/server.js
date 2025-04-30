@@ -48,6 +48,20 @@ connection.connect(function(err) {
     console.log("Connected to MYSQL database!");
 })
 
+function checkTokenForId(authHeader) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return -1
+    } 
+    const jwtToken = authHeader.split(' ')[2]
+    try {
+        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET)
+        const userId = decoded.userId
+        return userId
+    } catch(err) {
+        return -1
+    }
+}
+
 app.get('/api', (req, res) => {
     const sql = 'SELECT * FROM Users'
     connection.query(sql, function(error, result) {
@@ -62,18 +76,10 @@ app.get('/exercises', (req, res) => {
                 WHERE user_id = ? OR user_id = ?
                 ORDER BY name`
     const authHeader = req.headers.authorization
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Missing or invalid token' });
+    const userId = checkTokenForId(authHeader) 
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
     }
-    const jwtToken = authHeader.split(' ')[1];
-
-    try {
-        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
-        const userId = decoded.userId;
-    } catch (err) {
-        return res.status(401).json({ error: 'Invalid or expired token' });
-    }
-    console.log("/exercises UserID: ", userId)
     connection.query(sql, [process.env.ROOT_USER_ID, userId], function(error, result) {
         if (error) throw error;
         else {
@@ -83,13 +89,16 @@ app.get('/exercises', (req, res) => {
 })
 app.get('/exerciseData/:input', (req, res) => {
     const exercise_id = req.params.input;
-    const user_id = req.session.user
-    console.log("/exercideData/:input UserID: ", user_id)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const sql = `SELECT Sets.reps, Sets.weight, Workouts.date
                 FROM Sets 
                 INNER JOIN Workouts ON Sets.workout_id = Workouts.id
                 WHERE Sets.exercise_id = ? AND Workouts.user_id = ?`;
-    connection.query(sql, [exercise_id, user_id], function(err, setsResult) {
+    connection.query(sql, [exercise_id, userId], function(err, setsResult) {
         if (err) return res.status(500).json({ error: err.message })
         connection.query(
             `SELECT name FROM Exercises where id = ?`,
@@ -104,8 +113,11 @@ app.get('/exerciseData/:input', (req, res) => {
     })
 })
 app.get('/weightData', (req, res) => {
-    const userId = req.session.user
-    console.log("/weightData UserID: ", userId)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const sql = `SELECT weight, date
                 FROM WeightLogs
                 WHERE userId = ?`
@@ -118,11 +130,13 @@ app.get('/weightData', (req, res) => {
     })
 })
 
-
 app.post('/newExercise', (req, res) => {
     const postData = req.body;
-    const userId = req.session.user
-    console.log("/newExercise UserID: ", userId)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const query = {
         name: postData.exerciseName,
         user_id: userId
@@ -140,12 +154,15 @@ app.post('/newExercise', (req, res) => {
 })
 app.post('/editExercise', (req, res) => {
     const postData = req.body
-    const user_id = req.session.user
-    console.log("/editExercise UserID: ", user_id)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const sql = `UPDATE Exercises
                 SET name = ?
                 WHERE id = ? AND user_id = ?`
-    connection.query(sql, [postData.name, postData.id, user_id], function(err, result) {
+    connection.query(sql, [postData.name, postData.id, userId], function(err, result) {
         if (err) throw err;
         else {
             res.status(200).json({ message: 'Successful exercise edit'})
@@ -154,11 +171,14 @@ app.post('/editExercise', (req, res) => {
 })
 app.post('/deleteExercise', (req, res) => {
     const postData = req.body
-    const user_id = req.session.user
-    console.log("/deleteExercise UserID: ", user_id)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token"})
+    }
     const sql = `DELETE FROM Exercises
                 WHERE id = ? and user_id = ?`
-    connection.query(sql, [postData.id, user_id], function(err, result) {
+    connection.query(sql, [postData.id, userId], function(err, result) {
         if (err) throw err;
         else { 
             res.status(200).json({ message: 'Successful exercise delete' })
@@ -167,8 +187,11 @@ app.post('/deleteExercise', (req, res) => {
 })
 app.post('/submitWorkout', (req, res) => {
     const exercises = req.body;
-    const userId = req.session.user
-    console.log("/submitWorkout UserID: ", userId)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     insertWorkoutData(exercises, userId)
     return res.status(200).json({message: 'Successful workout submit'})
 })
@@ -221,13 +244,16 @@ function insertSet(set) {
     })
 }
 app.get('/workouts', (req, res) => {
-    const user_id = req.session.user
-    console.log("/workouts UserID: ", user_id)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const sql = `SELECT id, date, notes
                 FROM Workouts
                 WHERE user_id = ?
                 ORDER BY date DESC`
-    connection.query(sql, [user_id], function(err, result) {
+    connection.query(sql, [userId], function(err, result) {
         if (err) {
             console.log("Error: ", err.message)
             return res.status(500).json({ error: err.message })
@@ -237,12 +263,15 @@ app.get('/workouts', (req, res) => {
 })
 app.get('/workoutData/:input', (req, res) => {
     const workout_id = req.params.input
-    const user_id = req.session.user
-    console.log("/workoutData/:input UserID: ", user_id)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const sql = `SELECT date, notes
                 FROM Workouts
                 WHERE id = ? AND user_id = ?`
-    connection.query(sql, [workout_id, user_id], function(err, workoutResult) {
+    connection.query(sql, [workout_id, userId], function(err, workoutResult) {
         if (err) return res.status(500).json({ error: err.message })
         else if ( workoutResult.length == 0 ) return res.status(500).json({ message: "unauthorized workout" })
         const sql_2 = `SELECT Sets.reps, Sets.weight, Exercises.name
@@ -261,8 +290,11 @@ app.get('/workoutData/:input', (req, res) => {
 })
 app.post('/submitWeightLog', (req, res) => {
     const data = req.body
-    const userId = req.session.user
-    console.log("/submitWeightLog userId: ", userId)
+    const authHeader = req.headers.authorization
+    const userId = checkTokenForId(authHeader)
+    if (userId == -1) {
+        return res.status(401).json({ error: "Invalid token" })
+    }
     const sql = `INSERT INTO WeightLogs (userId, weight, date) VALUES (?, ?, ?)`
     connection.query(sql, [userId, data.weight, data.date], function(err, result) {
         if (err) res.status(500).json({ error: err.message })
@@ -283,20 +315,17 @@ app.post('/sign-up', (req, res) => {
         return res.status(401).json({message: 'Username taken'});
       } else {
         const userId = result.insertId
-        req.session.user = userId;
         
         const jwtToken = jwt.sign(
             { userId: userId},
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         )
-        req.session.save((err) => {
-            if (err) return res.status(500).json({ error: "Session error" });
-            res.status(200).json({
-                message: "SignUp successful",
-                token: jwtToken,
-                user: { id: userId, username: username }
-        })});
+        res.status(200).json({
+            message: "SignUp successful",
+            token: jwtToken,
+            user: { id: userId, username: username }
+        });
       }
     });
 })

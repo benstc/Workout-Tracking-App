@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import WorkoutItem from "./WorkoutItem.jsx"
 import SideBar from "./SideBar.jsx"
 import "./component_css/workouthistory.css"
@@ -8,13 +9,16 @@ export default function WorkoutHistory() {
     const [fetching, setFetching] = useState(true)
     const [workouts, setWorkouts] = useState(null)
     const navigate = useNavigate()
+    const token = useAuthHeader()
 
 
     useEffect(() => {
         if (!fetching) return
         fetch(`${import.meta.env.VITE_BACKEND_URL}/workouts`, {
             method: "GET",
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
           }).then(
           response => response.json()
         ).then(

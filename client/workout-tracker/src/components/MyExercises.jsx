@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import ExerciseItem from "./ExerciseItem.jsx"
 import SideBar from "./SideBar.jsx"
 import "./component_css/myexercises.css"
@@ -10,11 +11,15 @@ export default function MyExercises() {
     const [editedExercise, setEditedExercise] = useState(null)
     const contentRef = useRef(null)
 
+    const token = useAuthHeader()
+
     useEffect(() => {
         if (!fetching) return
         fetch(`${import.meta.env.VITE_BACKEND_URL}/exercises`, {
             method: "GET",
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
           }).then(
           response => response.json()
         ).then(
@@ -34,8 +39,10 @@ export default function MyExercises() {
       console.log("New edited exercise: ", editedExercise)
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/editExercise`, {
         method: "POST",
-        credentials: "include",
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify(editedExercise)
       })
       if (response.ok) {
@@ -52,8 +59,10 @@ export default function MyExercises() {
       console.log("Deleting exercise: ", editedExercise)
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/deleteExercise`, {
         method: "POST",
-        credentials: "include",
-        headers: {'Content-type': 'application/json'},
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify(editedExercise)
       })
       if (response.ok) {

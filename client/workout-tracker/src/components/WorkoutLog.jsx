@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 import ExerciseLog from "./ExerciseLog.jsx"
 import SearchableSelect from './SearchableSelect.jsx'
 import SideBar from './SideBar.jsx'
@@ -16,10 +17,11 @@ export default function WorkoutLog() {
     const [addingNewExercise, setAddingNewExercise] = useState(false)
     const navigate = useNavigate()
     const newInputRef = useRef(null)
+    const token = useAuthHeader()
 
     useEffect(() => {
         if (!fetching) return
-        const token = localStorage.getItem("token")
+        console.log("token: ", token)
         fetch(`${import.meta.env.VITE_BACKEND_URL}/exercises`, {
             method: "GET",
             headers: {
@@ -65,8 +67,10 @@ export default function WorkoutLog() {
         } else {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/newExercise`, {
                 method: 'POST',
-                credentials: "include",
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify({exerciseName: name})
             });
     
@@ -112,8 +116,10 @@ export default function WorkoutLog() {
         }
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/submitWorkout`, {
                 method: 'POST',
-                credentials: "include",
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify(workoutData)
             });
         if (response.ok) {
