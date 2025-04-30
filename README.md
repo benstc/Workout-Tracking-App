@@ -10,24 +10,18 @@ A clean React-based workout tracker that lets users log exercise information and
 
 ---
 
-## 📸 Screenshots
-
-![Screenshot 1](./screenshots/screenshot1.png)  
-*(Optional: Add GIFs or multiple images to show key features in action)*
-
----
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React, Vite, JS, Vercel
-- **Backend**: Node.js, Express, Render, AWS RDS
-- **Other Tools**: React Router, React Auth Kit, JWT
+- **Frontend**: React, Vite, JS, CSS, Vercel
+- **Backend**: Node.js, Express, mySQL, Render, AWS RDS
+- **Other Tools**: React Router, React Auth Kit, JWT, Chart.js
 
 ---
 
-## 🎥 Demo Video (Optional)
+## 🎥 Demo Video
 
-📽️ [Watch the Video Walkthrough](https://youtu.be/your-video-link)
+📽️ [Video Walkthrough](https://youtu.be/Y5u8E8Otz5Y)
 
 ---
 
@@ -37,3 +31,11 @@ A clean React-based workout tracker that lets users log exercise information and
 - ✅ Create, edit and delete custom exercises
 - ✅ Data vizualization of user progress
 
+---
+
+## 🧠 What I Learned
+
+- Component-based frontend architecture with React
+- Designing and implementing an efficient SQL schema
+- User authentication with Javascript Web Tokens
+- Deploying a full-stack web application online
