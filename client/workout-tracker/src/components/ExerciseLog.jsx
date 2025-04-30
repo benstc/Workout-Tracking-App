@@ -21,6 +21,7 @@ export default function ExerciseLog({ index, exerciseObj, onExerciseChange, onEx
     function handleSetDelete(targetIndex) {
         const newSets = sets.filter((log, index) => index !== targetIndex);
         setSets(newSets)
+        onExerciseChange(exerciseObj.exercise.id, newSets)
     }
 
     return (
