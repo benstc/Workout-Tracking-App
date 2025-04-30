@@ -7,6 +7,11 @@ A clean React-based workout tracker that lets users log exercise information and
 ## 🌐 Live Demo
 
 🔗 [View Deployed App](https://workout-tracking-app-lake.vercel.app/)
+View the demo video below for a walkthorugh of how the web app works.
+Also, allow ~20 seconds upon clicking the submit button to log in or 
+sign up upon loading the appsince the backend spins down after a period 
+of inactivity. If it hasn't loaded in ~20 seconds, close out and click 
+the link again and it should work fine. 
 
 ---
 
