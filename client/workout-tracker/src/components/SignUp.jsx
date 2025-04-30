@@ -14,7 +14,6 @@ export default function SignUp() {
         } else {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sign-up`, { //ensure that the /signup path exists in server
                 method: 'POST',
-                credentials: "include",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     username: username,

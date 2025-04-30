@@ -19,7 +19,6 @@ export default function LoginPage() {
             console.log("logging env var: ", import.meta.env.VITE_BACKEND_URL);
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, { // ensure the /login route exists in the server
                 method: 'POST',
-                credentials: "include",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(userData)
             })

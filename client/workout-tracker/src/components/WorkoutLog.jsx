@@ -178,9 +178,4 @@ export default function WorkoutLog() {
                     placeholder="Any notes about this workout?"
                 />
             </div>
-            {exercises.length != 0 ? <div>
-                <button onClick={submitWorkout}>Submit</button>
-            </div> : null}
-        </>
-    )
-}
+    

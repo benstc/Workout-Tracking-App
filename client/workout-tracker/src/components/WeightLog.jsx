@@ -59,10 +59,4 @@ export default function WeightLog() {
                         onChange={(e) => setDateInput(e.target.value)}
                     />
                 </div>
-                <div>
-                    <button onClick={submitWeightLog}>Submit</button>
-                </div>
-            </div>
-        </div>
-    )
-}
+       
