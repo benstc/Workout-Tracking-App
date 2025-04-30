@@ -69,7 +69,7 @@ export default function MyExercises() {
         console.log("exercise deleted successfully")
         setEditedExercise(null)
         contentRef.current.classList.remove("blurred")
-        window.location.reload()
+        setFetching(true)
       } else {
         console.log("Error editing exercise")
         alert("Error editing exercise")
