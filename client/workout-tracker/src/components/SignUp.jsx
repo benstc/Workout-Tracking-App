@@ -40,7 +40,6 @@ export default function SignUp() {
                 body: JSON.stringify(userData)
             })
             if (!response.ok) {
-                const errorData = await response.json();
                 throw new Error(errorData.message || 'Login failed');
             }
             return await response.json();
