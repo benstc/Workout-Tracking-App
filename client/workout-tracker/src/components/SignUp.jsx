@@ -12,16 +12,14 @@ export default function SignUp() {
         if (username == "" || password == "") {
             alert("Input username and password before submitting")
         } else {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sign-up`, { //ensure that the /signup path exists in server
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            })
-            if (response.ok) {
-                const data = await response.json()
+            const userData = {
+                username: username,
+                password: password
+            }
+            const data = await trySignUp(userData)
+            if (data == -1) {
+                alert("Error logging in, return to landing page and try again")
+            } else {
                 const isSignedIn = signIn({
                     auth: {
                         token: data.token,
@@ -29,13 +27,33 @@ export default function SignUp() {
                     },
                     userState: { username: username, userId: data.user.id }
                 });
-                navigate("/Dashboard")
-            } else {
-                console.error("Error signing up: ", await response.json())
-                return                
+                navigate("/Dashboard")         
             }
         }
     }
+
+    async function trySignUp(userData, retries = 1) {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sign-up`, { //ensure that the /signup path exists in server
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(userData)
+            })
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Login failed');
+            }
+            return await response.json();
+        } catch (err) {
+          if (retries > 0) {
+            console.warn("Login failed — retrying in 1s...");
+            await new Promise(res => setTimeout(res, 1000));
+            return trySignUp(userData, retries - 1);
+          } else {
+            return -1;
+          }
+        }
+      }
 
     return (
         <>

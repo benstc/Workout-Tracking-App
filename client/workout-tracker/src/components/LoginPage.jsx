@@ -16,28 +16,49 @@ export default function LoginPage() {
                 username: username,
                 password: password
             }
-            console.log("logging env var: ", import.meta.env.VITE_BACKEND_URL);
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, { // ensure the /login route exists in the server
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(userData)
-            })
-            if (response.ok) {
-                const data = await response.json()
+            const response = await tryLogin(userData)
+            console.log("response: ", response)
+            if (response == -1) {
+                alert("Error logging in, return to landing page and try again")
+            } else {
+
                 const isSignedIn = signIn({
                     auth: {
-                      token: data.token,
-                      type: 'token'
+                        token: response.token,
+                        type: 'token'
                     },
-                    userState: { username: username, userId: data.user.id }
-                  });
+                    userState: { username: username, userId: response.user.id }
+                    });
                 navigate("/Dashboard")
-            } else {
-                console.error("Error logging in: ", await response.json())
-                return         
             }
         }
     }
+
+    async function tryLogin(userData, retries = 1) {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
+          });
+      
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Login failed');
+          }
+      
+          return await response.json();
+      
+        } catch (err) {
+          if (retries > 0) {
+            console.warn("Login failed — retrying in 1s...");
+            await new Promise(res => setTimeout(res, 1000));
+            return tryLogin(userData, retries - 1);
+          } else {
+            return -1;
+          }
+        }
+      }
 
 
     return (
